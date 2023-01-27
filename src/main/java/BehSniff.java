@@ -14,7 +14,8 @@ public class BehSniff extends TickerBehaviour {
     @Override
     protected void onTick() {
 
-        System.out.println("Tick");
+        String myId = String.valueOf(this.getAgent().getAID().getLocalName().replace("SnifferAgent_Container",""));
+
 
         Instances test=null;
 
@@ -27,17 +28,17 @@ public class BehSniff extends TickerBehaviour {
             e.printStackTrace();
         }
 
-        PacketSniffer packetSniffer = new PacketSniffer(test.get(new Random().nextInt(test.size()-1)),false);
+        PacketSniffer packetSniffer = new PacketSniffer(test.get(new Random().nextInt(test.size()-1)),false,myId);
 
         ManagerAgent.packetsDetected.add(packetSniffer);
         ManagerAgent.all.add(packetSniffer);
 
 
-        //System.out.println("Random was: "+ManagerAgent.number+"\n"+packetSniffer.getInstance());
-        ManagerAgent.number=new Random().nextInt(1000);
+        ManagerAgent.containers.get(Integer.parseInt(myId)-1).getPacketsDetected().add(packetSniffer);
+        ManagerAgent.containers.get(Integer.parseInt(myId)-1).getAll().add(packetSniffer);
 
-        //ManagerAgent.number=4000;
-        reset(ManagerAgent.number);
+
+
 
 
     }

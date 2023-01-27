@@ -19,6 +19,7 @@ public class BehClassif extends CyclicBehaviour {
 
 
                 ManagerAgent.packetsDetected.remove(packetSniffer);
+                ManagerAgent.containers.get(Integer.parseInt(packetSniffer.getByWho())-1).getPacketsDetected().remove(packetSniffer);
 
 
 
@@ -37,6 +38,8 @@ public class BehClassif extends CyclicBehaviour {
     public void Solve(ArrayList<Attack> attacks, PacketSniffer packetTest, Clsi DT, Clsi SVM, Clsi NN) throws Exception{
 
         //String containerID = getMyID(getAID().getLocalName());
+
+
 
         double resultj48 = DT.getClassifier().classifyInstance(packetTest.getInstance());
         double resultjsvm = SVM.getClassifier().classifyInstance(packetTest.getInstance());
@@ -63,7 +66,11 @@ public class BehClassif extends CyclicBehaviour {
         packetDetected.setCategory(attacks.get((int)finall).getCategory());
         System.out.println("\n\nCATE:"+packetDetected.getCategory());
         packetDetected.setBywho(getByWho(attacks.get((int)finall).getName(),attackj48,attacksvm,attacknn));
+
         ManagerAgent.packetsClassified.add(packetDetected);
+
+        ManagerAgent.containers.get(Integer.parseInt(packetTest.getByWho())-1).getPacketClassified().add(packetDetected);
+
 
         sendPackettoDB(packetDetected);
 

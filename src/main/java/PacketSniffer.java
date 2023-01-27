@@ -4,14 +4,16 @@ public class PacketSniffer {
     private Instance instance;
 
     private boolean solved;
+    private String byWho;
 
     PacketSniffer(){
 
     }
 
-    PacketSniffer(Instance instance, boolean solved){
+    PacketSniffer(Instance instance, boolean solved,String byWho){
         this.instance=instance;
         this.solved = solved;
+        this.byWho = byWho;
 
     }
 
@@ -33,7 +35,11 @@ public class PacketSniffer {
     }
 
 
+    public String getByWho() {
+        return byWho;
+    }
 
-
-
+    public void setByWho(String byWho) {
+        this.byWho = byWho;
+    }
 }

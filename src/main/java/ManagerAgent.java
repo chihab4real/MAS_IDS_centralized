@@ -11,6 +11,8 @@ public class ManagerAgent extends Agent {
     public static ArrayList<PacketSniffer> packetsDetected=new ArrayList<>();
     public static ArrayList<PacketDetected> packetsClassified=new ArrayList<>();
     public static ArrayList<PacketSniffer> all=new ArrayList<>();
+    public static int numberOfContainers =3;
+    public static ArrayList<Container> containers = new ArrayList<>();
 
     public static ArrayList<Attack> attacks=new ArrayList<>();
     public static int number=1000;
