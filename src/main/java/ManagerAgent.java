@@ -18,11 +18,15 @@ public class ManagerAgent extends Agent {
     public static int number=1000;
 
     public static Clsi DT,SVM,NN;
+
+    public static boolean stop = false;
+    public static Instances test = null;
     @Override
     protected void setup() {
 
         addBehaviour(new BehTrain());
-        addBehaviour(new BehSniff(this));
+
+        addBehaviour(new CreateContainersBehav());
 
         addBehaviour(new BehClassif());
     }

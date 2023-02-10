@@ -1,6 +1,8 @@
+import com.mongodb.*;
 import jade.core.Profile;
 import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
+import org.w3c.dom.Document;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -9,15 +11,18 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class Main {
 
+
     static int index1=0;
     public static void main(String[] args) {
 
-        int time_ex=60;
+
+        int time_ex=300;
 
         Timer timer = new Timer();
 
@@ -25,25 +30,25 @@ public class Main {
             @Override
             public void run() {
 
-                if(index1==time_ex){
+                if(index1>=time_ex){
                     try {
                         PlatformPara.containerController.kill();
                     } catch (StaleProxyException e) {
                         e.printStackTrace();
                     }
-
-                    System.out.println("\n\n\nArchitecture Centraliee\nTemps d'exuction: "+time_ex+" seconcds");
-                    System.out.println("Packets Detecters: "+ManagerAgent.all.size());
-                    System.out.println("Packets Classifiers: "+ManagerAgent.packetsClassified.size());
-                    ArrayList<Integer> arrayList = howMuchNormal(ManagerAgent.packetsClassified);
-
-                    System.out.println("Normal: "+arrayList.get(0)+"\t("+(arrayList.get(0)*100/ManagerAgent.packetsClassified.size())+")%");
-                    System.out.println("Anomaly: "+arrayList.get(1)+"\t("+(arrayList.get(1)*100/ManagerAgent.packetsClassified.size())+")%");
-
+                    System.out.println(ManagerAgent.all.size());
+                    try {
+                        sendPackettoDB(ManagerAgent.packetsClassified);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     System.exit(0);
+
+                    ManagerAgent.stop = true;
                 }
 
-                index1++;
+
+                index1+=1;
 
             }
         },58000,1000);
@@ -83,7 +88,7 @@ public class Main {
 
     public static void getSummary() throws Exception{
 
-        String fileName="C:\\Users\\pc\\Desktop\\3IDS_TEST\\H\\STATES"+PlatformPara.startTime+".txt";
+        String fileName="C:\\Users\\pc\\Desktop\\3IDS_TEST\\C\\STATES"+PlatformPara.startTime+".txt";
 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 
@@ -133,4 +138,48 @@ public class Main {
 
 
     }
+    public static ArrayList<Integer> howMuchNormal2(Container container){
+
+
+        ArrayList<Integer> arrayList1 = new ArrayList<>();
+        arrayList1.add(0);
+        arrayList1.add(0);
+
+        for(int i=0;i<container.getPacketClassified().size();i++){
+            if(container.getPacketClassified().get(i).getCategory().equals("Normal")){
+                arrayList1.set(0,arrayList1.get(0)+1);
+            }else{
+                arrayList1.set(1,arrayList1.get(1)+1);
+            }
+        }
+
+
+        return arrayList1;
+    }
+
+
+    //to be removed
+
+    public static void sendPackettoDB(ArrayList<PacketDetected> packetDetected)throws Exception{
+        MongoClient mongoClient = new MongoClient(new MongoClientURI("mongodb://localhost:27017"));
+        DB database = mongoClient.getDB("Test_Centralized");
+
+        DBCollection collection = database.getCollection("PacketsDetected_1_100");
+
+
+        for(PacketDetected p : packetDetected){
+            DBObject dbObject = p.toDBObject();
+            collection.insert(dbObject);
+        }
+
+
+
+
+
+
+
+
+
+    }
+
 }

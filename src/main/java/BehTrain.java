@@ -27,6 +27,9 @@ public class BehTrain extends OneShotBehaviour {
     @Override
     public void action() {
         try {
+
+            ManagerAgent.test = new ConverterUtils.DataSource("KDDTest.arff").getDataSet();
+            ManagerAgent.test.setClassIndex(ManagerAgent.test.numAttributes()-1);
             System.out.println("Test");
             Instances TrainDataDT = getTrainDatasetDT("PacketsTrainDT");
             Instances TrainDataSVM = getTrainDatasetDT("PacketsTrainSVMNN");

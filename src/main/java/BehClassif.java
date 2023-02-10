@@ -10,28 +10,32 @@ public class BehClassif extends CyclicBehaviour {
     @Override
     public void action() {
 
-        if(!ManagerAgent.packetsDetected.isEmpty()){
-            PacketSniffer packetSniffer = ManagerAgent.packetsDetected.get(0);
+
+        if(!ManagerAgent.stop){
+            if(!ManagerAgent.packetsDetected.isEmpty()){
+                PacketSniffer packetSniffer = ManagerAgent.packetsDetected.get(0);
 
 
-            try {
-                Solve(ManagerAgent.attacks,packetSniffer,ManagerAgent.DT,ManagerAgent.SVM,ManagerAgent.NN);
+                try {
+                    Solve(ManagerAgent.attacks,packetSniffer,ManagerAgent.DT,ManagerAgent.SVM,ManagerAgent.NN);
 
 
-                ManagerAgent.packetsDetected.remove(packetSniffer);
-                ManagerAgent.containers.get(Integer.parseInt(packetSniffer.getByWho())-1).getPacketsDetected().remove(packetSniffer);
+                    ManagerAgent.packetsDetected.remove(packetSniffer);
+                    ManagerAgent.containers.get((Integer.parseInt(packetSniffer.getByWho())-1)).getPacketsDetected().remove(packetSniffer);
 
 
 
-            } catch (Exception e) {
-                e.printStackTrace();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+
+
+
+
             }
-
-
-
-
-
         }
+
     }
 
 
@@ -44,35 +48,36 @@ public class BehClassif extends CyclicBehaviour {
         double resultj48 = DT.getClassifier().classifyInstance(packetTest.getInstance());
         double resultjsvm = SVM.getClassifier().classifyInstance(packetTest.getInstance());
         double resultjnn = NN.getClassifier().classifyInstance(packetTest.getInstance());
+
         Attack attackj48 = attacks.get((int)resultj48);
         Attack attacksvm = attacks.get((int)resultjsvm);
         Attack attacknn = attacks.get((int)resultjnn);
 
 
-        System.out.println("\n\nPacket : "+"--:\t"+packetTest.getInstance()+"\nDetected as :\n----------------");
+        /*System.out.println("\n\nPacket : "+"--:\t"+packetTest.getInstance()+"\nDetected as :\n----------------");
 
         System.out.println("Decesion tree: "+attacks.get((int) resultj48).getName()+"  ["+attacks.get((int)resultj48).getCategory()+"]");
 
         System.out.println("SVM: "+attacks.get((int) resultjsvm).getName()+"  ["+attacks.get((int)resultjsvm).getCategory()+"]");
-        System.out.println("NN: "+attacks.get((int) resultjnn).getName()+"  ["+attacks.get((int)resultjnn).getCategory()+"]\n\n");
+        System.out.println("NN: "+attacks.get((int) resultjnn).getName()+"  ["+attacks.get((int)resultjnn).getCategory()+"]\n\n");*/
 
         double finall= getFinaleClass(DT,SVM,NN,attackj48,attacksvm,attacknn);
 
-        System.out.println("Final decision : "+attacks.get((int)finall).getName());
+        //System.out.println("Final decision : "+attacks.get((int)finall).getName());
 
         Instance instance = packetTest.getInstance();
         instance.setValue(26,finall);
         PacketDetected packetDetected = new PacketDetected(instance);
         packetDetected.setCategory(attacks.get((int)finall).getCategory());
-        System.out.println("\n\nCATE:"+packetDetected.getCategory());
+        //System.out.println("\n\nCATE:"+packetDetected.getCategory());
         packetDetected.setBywho(getByWho(attacks.get((int)finall).getName(),attackj48,attacksvm,attacknn));
 
         ManagerAgent.packetsClassified.add(packetDetected);
 
-        ManagerAgent.containers.get(Integer.parseInt(packetTest.getByWho())-1).getPacketClassified().add(packetDetected);
+        ManagerAgent.containers.get((Integer.parseInt(packetTest.getByWho())-1)).getPacketClassified().add(packetDetected);
 
 
-        sendPackettoDB(packetDetected);
+        //sendPackettoDB(packetDetected);
 
         /*
 
@@ -160,7 +165,7 @@ public class BehClassif extends CyclicBehaviour {
             x+="NN,";
         }
 
-        System.out.println("\n\nBYWHO:"+x);
+        //System.out.println("\n\nBYWHO:"+x);
         return x;
     }
 
@@ -169,23 +174,16 @@ public class BehClassif extends CyclicBehaviour {
         MongoClient mongoClient = new MongoClient(new MongoClientURI("mongodb://localhost:27017"));
         DB database = mongoClient.getDB("Test_Centralized");
 
-        DBCollection collection = database.getCollection("PacketsDetected");
+        DBCollection collection = database.getCollection("PacketsDetected_01_5");
 
 
         DBObject dbObject = packetDetected.toDBObject();
 
-        /*List<Integer> books = Arrays.asList(27464, 747854);
 
-        DBObject person = new BasicDBObject("_id", "jo")
-                .append("name", "Jo Bloggs")
-                .append("address", new BasicDBObject("street", "123 Fake St")
-                        .append("city", "Faketon")
-                        .append("state", "MA")
-                        .append("zip", 12345))
-                .append("books", books);*/
+
 
         collection.insert(dbObject);
-        System.out.println("Packet Detectd and saved as  "+dbObject.get("class"));
+        //System.out.println("Packet Detectd and saved as  "+dbObject.get("class"));
 
 
     }

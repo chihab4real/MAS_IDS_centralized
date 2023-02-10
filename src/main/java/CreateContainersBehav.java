@@ -26,6 +26,7 @@ public class CreateContainersBehav extends SimpleBehaviour {
         ContainerController containerController =  runtime.createAgentContainer(profile);
         AgentController agentController = null;
         try {
+            ManagerAgent.containers.add(new Container());
             agentController = containerController.createNewAgent("SnifferAgent_Container"+n,"SnifferAgent",null);
             agentController.start();
             //ShutdownPlatform shutdownPlatform = new ShutdownPlatform();
@@ -37,7 +38,7 @@ public class CreateContainersBehav extends SimpleBehaviour {
 
         n++;
 
-        if(n==3){
+        if(n==101){
 
             condition=true;
         }

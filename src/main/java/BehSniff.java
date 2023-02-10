@@ -14,28 +14,30 @@ public class BehSniff extends TickerBehaviour {
     @Override
     protected void onTick() {
 
-        String myId = String.valueOf(this.getAgent().getAID().getLocalName().replace("SnifferAgent_Container",""));
+        if(!ManagerAgent.stop){
+            String myId = String.valueOf(this.getAgent().getAID().getLocalName().replace("SnifferAgent_Container",""));
 
 
-        Instances test=null;
+            //Instances test=null;
 
-        try {
-            test = new DataSource("KDDTest.arff").getDataSet();
-            test.setClassIndex(test.numAttributes()-1);
+            try {
 
 
-        }catch (Exception e){
-            e.printStackTrace();
+
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
+            PacketSniffer packetSniffer = new PacketSniffer(ManagerAgent.test.get(new Random().nextInt(ManagerAgent.test.size()-1)),false,myId);
+
+            ManagerAgent.packetsDetected.add(packetSniffer);
+            ManagerAgent.all.add(packetSniffer);
+
+
+            ManagerAgent.containers.get(Integer.parseInt(myId)-1).getPacketsDetected().add(packetSniffer);
+            ManagerAgent.containers.get(Integer.parseInt(myId)-1).getAll().add(packetSniffer);
         }
 
-        PacketSniffer packetSniffer = new PacketSniffer(test.get(new Random().nextInt(test.size()-1)),false,myId);
-
-        ManagerAgent.packetsDetected.add(packetSniffer);
-        ManagerAgent.all.add(packetSniffer);
-
-
-        ManagerAgent.containers.get(Integer.parseInt(myId)-1).getPacketsDetected().add(packetSniffer);
-        ManagerAgent.containers.get(Integer.parseInt(myId)-1).getAll().add(packetSniffer);
 
 
 

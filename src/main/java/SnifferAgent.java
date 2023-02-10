@@ -45,20 +45,7 @@ public class SnifferAgent extends Agent {
         messageListe = new Message(msg.getSender().getLocalName(),"SubManagerAgent_Container"+containerID,msg.getContent());
         ManagerAgent.addMessage(messageListe);*/
 
-        addBehaviour(new OneShotBehaviour() {
-            @Override
-            public void action() {
-                try {
-                    AgentController agentController = null;
-                    agentController = getContainerController().createNewAgent("AnalysorAgent_Container"+containerID,"AnalysorAgent",null);
 
-
-                    agentController.start();
-                } catch (StaleProxyException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
 
         addBehaviour(new BehSniff(this));
 
