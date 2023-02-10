@@ -425,8 +425,8 @@ public class PacketDT {
                 .append("dst_host_srv_serror_rate",this.dst_host_srv_serror_rate)
                 .append("dst_host_rerror_rate",this.dst_host_rerror_rate)
                 .append("dst_host_srv_rerror_rate",this.dst_host_srv_rerror_rate)
-                .append("class",this.classy)
-        ;
+                .append("class",this.classy);
+
 
 
         return dbObject;
@@ -438,38 +438,6 @@ public class PacketDT {
 
 
 
-    /*
-
-    public static void main(String[] args)throws Exception {
-        DataSource dataSource = new DataSource("C:\\Users\\pc\\Desktop\\IDSData3\\DT\\KDDTrainDT.arff");
-        Instances train = dataSource.getDataSet();
-        train.setClassIndex(train.numAttributes()-1);
 
 
-        String x = "\"";
-
-        /*
-        for(int i=0;i<train.numAttributes();i++){
-            if(train.attribute(i).isNumeric()){
-                System.out.println("instance.setValue("+i+",Double.parseDouble(this."+train.attribute(i).name()+"));");
-            }else{
-                System.out.println("instance.setValue("+i+",this."+train.attribute(i).name()+");");
-            }
-
-        }*/
-
-        /*DBObject person = new BasicDBObject("_id", "jo")
-                .append("name", "Jo Bloggs")
-                .append("address", new BasicDBObject("street", "123 Fake St")
-                        .append("city", "Faketon")
-                        .append("state", "MA")
-                        .append("zip", 12345))
-                .append("books", books);
-        for(int i=0;i<train.numAttributes();i++){
-            System.out.println(".append(\""+train.attribute(i).name()+"\",this."+train.attribute(i).name()+")");
-        }
-
-
-
-    }*/
 }

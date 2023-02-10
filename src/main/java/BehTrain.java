@@ -16,44 +16,48 @@ public class BehTrain extends OneShotBehaviour {
 
     public static ArrayList<Attack> attacks = new ArrayList<>();
 
-    Clsi DT;
-    Clsi SVM;
-    Clsi NN;
+    Clasificator DT;
+    Clasificator SVM;
+    Clasificator NN;
 
-    private int ok1 = 0;
-    private int ok2 = 0;
-    private int ok3 = 0;
+    private boolean DT_TrainingDone;
+    private boolean SVM_TrainingDone;
+    private boolean NN_TrainingDone;
 
     @Override
     public void action() {
         try {
 
             ManagerAgent.test = new ConverterUtils.DataSource("KDDTest.arff").getDataSet();
+
             ManagerAgent.test.setClassIndex(ManagerAgent.test.numAttributes()-1);
-            System.out.println("Test");
+
+            System.out.println("start-training");
+
             Instances TrainDataDT = getTrainDatasetDT("PacketsTrainDT");
             Instances TrainDataSVM = getTrainDatasetDT("PacketsTrainSVMNN");
-            attacks = getAttcks();
-            ok1=0;
-            ok2=0;
-            ok3=0;
+            attacks = getAttacks();
+
+            DT_TrainingDone=false;
+            SVM_TrainingDone=false;
+            NN_TrainingDone=false;
             CallDT(TrainDataDT);
 
             CallSVM(TrainDataSVM);
             CallNN(TrainDataSVM);
 
             ManagerAgent.DT=DT;
-
-
             ManagerAgent.SVM=SVM;
             ManagerAgent.NN=NN;
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
 
-    public static ArrayList<Attack> getAttcks() throws Exception {
+    public static ArrayList<Attack> getAttacks() throws Exception {
 
 
 
@@ -73,6 +77,7 @@ public class BehTrain extends OneShotBehaviour {
         ManagerAgent.attacks=attacks;
         return attacks;
     }
+
     public static Instances getTrainDatasetDT(String CollectionName) throws Exception {
 
         MongoClient mongoClient = new MongoClient(new MongoClientURI("mongodb://localhost:27017"));
@@ -99,7 +104,7 @@ public class BehTrain extends OneShotBehaviour {
         J48 j48 = new J48();
         j48.buildClassifier(TrainDataDT);
 
-        DT = new Clsi("DT", j48, TrainDataDT);
+        DT = new Clasificator("DT", j48, TrainDataDT);
 
 
         System.out.println("DT DONE-----");
@@ -118,7 +123,7 @@ public class BehTrain extends OneShotBehaviour {
                 DT.getEvaluation().kappa()+",");*/
 
         //sendMSG("DT,TR"+TrainDataDT.size()+",FM"+DT.getEvaluation().fMeasure(1)+",PR"+DT.getEvaluation().precision(1));
-        ok1 = 1;
+        DT_TrainingDone = true;
 
 
     }
@@ -133,7 +138,7 @@ public class BehTrain extends OneShotBehaviour {
         multilayerPerceptron.setTrainingTime(2000);
         multilayerPerceptron.setHiddenLayers("3");
         multilayerPerceptron.buildClassifier(TrainDataSVM);
-        NN = new Clsi("NN", multilayerPerceptron, TrainDataSVM);
+        NN = new Clasificator("NN", multilayerPerceptron, TrainDataSVM);
         System.out.println("NN done");
         System.out.println("F-Measure :" + NN.getEvaluation().fMeasure(1));
         /*System.out.println("Precision : "+DT.getEvaluation().precision(1));
@@ -149,7 +154,7 @@ public class BehTrain extends OneShotBehaviour {
                 NN.getEvaluation().kappa()+",");*/
         //sendMSG("NN,TR"+TrainDataSVM.size()+",FM"+NN.getEvaluation().fMeasure(1)+",PR"+NN.getEvaluation().precision(1));
 
-        ok2 = 1;
+        NN_TrainingDone=true;
 
     }
 
@@ -158,7 +163,7 @@ public class BehTrain extends OneShotBehaviour {
 
         SMO smo = new SMO();
         smo.buildClassifier(TrainDataSVM);
-        SVM = new Clsi("SVM", smo, TrainDataSVM);
+        SVM = new Clasificator("SVM", smo, TrainDataSVM);
         System.out.println("SVM done");
         System.out.println("F-Measure :" + SVM.getEvaluation().fMeasure(1));
         /*System.out.println("Precision : "+DT.getEvaluation().precision(1));
@@ -175,12 +180,12 @@ public class BehTrain extends OneShotBehaviour {
         //sendMSG("SVM,TR"+TrainDataSVM.size()+",FM"+SVM.getEvaluation().fMeasure(1)+",PR"+SVM.getEvaluation().precision(1));
 
 
-        ok3 = 1;
+        SVM_TrainingDone = true;
 
 
     }
 
-    void SaveToLocal(Clsi clsi) throws IOException {
+    void SaveToLocal(Clasificator clsi) throws IOException {
 
 
         FileOutputStream fileOutputStream = new FileOutputStream("C:\\Users\\pc\\Desktop\\folderfortest\\dt.dat");

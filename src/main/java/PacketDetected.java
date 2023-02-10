@@ -150,7 +150,7 @@ public class PacketDetected {
         this.classy = String.valueOf(instance.stringValue(26));
         //this.category = String.valueOf(instance.stringValue(27));
         //this.bywho = String.valueOf(instance.stringValue(28));
-        this.date = methode();
+        this.date = getTodayDate();
 
 
     }
@@ -418,14 +418,10 @@ public class PacketDetected {
     }
 
 
-    private String methode(){
+    private String getTodayDate(){
         LocalDateTime localDateTime = LocalDateTime.now();
         return localDateTime.getYear()+"/"+localDateTime.getMonthValue()+"/"+localDateTime.getDayOfMonth()+
                 "_"+localDateTime.getHour()+":"+localDateTime.getMinute()+":"+localDateTime.getSecond();
-    }
-
-    public static void main(String[] args) {
-
     }
 
 

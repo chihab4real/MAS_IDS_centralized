@@ -2,19 +2,18 @@ import weka.classifiers.Classifier;
 import weka.classifiers.evaluation.Evaluation;
 import weka.core.Instances;
 
-import java.io.Serializable;
+public class Clasificator{
 
-public class Clsi   {
     private Classifier classifier;
     private String Name;
 
     private Evaluation evaluation;
 
-    Clsi(){
+    Clasificator(){
 
     }
 
-    Clsi(String name , Classifier classifier, Instances trainData ) throws Exception {
+    Clasificator(String name , Classifier classifier, Instances trainData ) throws Exception {
         this.Name=name;
         this.classifier = classifier;
 

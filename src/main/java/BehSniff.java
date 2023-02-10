@@ -31,7 +31,8 @@ public class BehSniff extends TickerBehaviour {
             PacketSniffer packetSniffer = new PacketSniffer(ManagerAgent.test.get(new Random().nextInt(ManagerAgent.test.size()-1)),false,myId);
 
             ManagerAgent.packetsDetected.add(packetSniffer);
-            ManagerAgent.all.add(packetSniffer);
+
+            ManagerAgent.allPackets.add(packetSniffer);
 
 
             ManagerAgent.containers.get(Integer.parseInt(myId)-1).getPacketsDetected().add(packetSniffer);

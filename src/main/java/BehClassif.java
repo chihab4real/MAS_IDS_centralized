@@ -39,7 +39,7 @@ public class BehClassif extends CyclicBehaviour {
     }
 
 
-    public void Solve(ArrayList<Attack> attacks, PacketSniffer packetTest, Clsi DT, Clsi SVM, Clsi NN) throws Exception{
+    public void Solve(ArrayList<Attack> attacks, PacketSniffer packetTest, Clasificator DT, Clasificator SVM, Clasificator NN) throws Exception{
 
         //String containerID = getMyID(getAID().getLocalName());
 
@@ -106,7 +106,7 @@ public class BehClassif extends CyclicBehaviour {
 
     }
 
-    public  double getFinaleClass(Clsi DT, Clsi SVM, Clsi NN, Attack j48, Attack svm, Attack nn){
+    public  double getFinaleClass(Clasificator DT, Clasificator SVM, Clasificator NN, Attack j48, Attack svm, Attack nn){
 
 
 
@@ -117,7 +117,7 @@ public class BehClassif extends CyclicBehaviour {
 
         ArrayList<String> strings = new ArrayList<>();
         ArrayList<Double> scores = new ArrayList<>();
-        ArrayList<Clsi> clsis = new ArrayList<>();
+        ArrayList<Clasificator> clsis = new ArrayList<>();
         clsis.add(DT);
         clsis.add(SVM);
         clsis.add(NN);

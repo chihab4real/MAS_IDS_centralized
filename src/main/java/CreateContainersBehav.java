@@ -13,13 +13,12 @@ public class CreateContainersBehav extends SimpleBehaviour {
     @Override
     public void action() {
 
+
+
         Runtime runtime = Runtime.instance();
         ProfileImpl profile = new ProfileImpl();
         profile.setParameter(Profile.CONTAINER_NAME, "Container"+n);
         profile.setParameter(Profile.MAIN_HOST, "localhost");
-        //Container container = new Container();
-        //container.setSubManagerAID("SubManagerAgent_Container"+container.getContainerID());
-        //ManagerAgent.containers.add(container);
 
 
 
@@ -29,7 +28,7 @@ public class CreateContainersBehav extends SimpleBehaviour {
             ManagerAgent.containers.add(new Container());
             agentController = containerController.createNewAgent("SnifferAgent_Container"+n,"SnifferAgent",null);
             agentController.start();
-            //ShutdownPlatform shutdownPlatform = new ShutdownPlatform();
+
 
         } catch (StaleProxyException e) {
             e.printStackTrace();
@@ -38,7 +37,7 @@ public class CreateContainersBehav extends SimpleBehaviour {
 
         n++;
 
-        if(n==101){
+        if(n==ManagerAgent.numberOfContainers+1){
 
             condition=true;
         }

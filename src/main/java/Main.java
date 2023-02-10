@@ -32,11 +32,13 @@ public class Main {
 
                 if(index1>=time_ex){
                     try {
-                        PlatformPara.containerController.kill();
+                        PlatformParameter.containerController.kill();
                     } catch (StaleProxyException e) {
                         e.printStackTrace();
                     }
-                    System.out.println(ManagerAgent.all.size());
+
+
+                    System.out.println(ManagerAgent.allPackets.size());
                     try {
                         sendPackettoDB(ManagerAgent.packetsClassified);
                     } catch (Exception e) {
@@ -54,15 +56,15 @@ public class Main {
         },58000,1000);
 
 
-        PlatformPara.profile.setParameter(Profile.MAIN_HOST, "localhost");
-        PlatformPara.profile.setParameter(Profile.GUI,"true");
-        PlatformPara.containerController = PlatformPara.runtime.createMainContainer(PlatformPara.profile);
-        PlatformPara.startTime=PlatformPara.methode();
+        PlatformParameter.profile.setParameter(Profile.MAIN_HOST, "localhost");
+        PlatformParameter.profile.setParameter(Profile.GUI,"true");
+        PlatformParameter.containerController = PlatformParameter.runtime.createMainContainer(PlatformParameter.profile);
+        PlatformParameter.startTime=PlatformParameter.methode();
 
         AgentController agentController=null;
 
         try {
-            agentController = PlatformPara.containerController.createNewAgent("ManagerAgent","ManagerAgent",null);
+            agentController = PlatformParameter.containerController.createNewAgent("ManagerAgent","ManagerAgent",null);
             agentController.start();
         }catch (StaleProxyException e){
             e.printStackTrace();
@@ -88,11 +90,11 @@ public class Main {
 
     public static void getSummary() throws Exception{
 
-        String fileName="C:\\Users\\pc\\Desktop\\3IDS_TEST\\C\\STATES"+PlatformPara.startTime+".txt";
+        String fileName="C:\\Users\\pc\\Desktop\\3IDS_TEST\\C\\STATES"+PlatformParameter.startTime+".txt";
 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 
-        String time_work="Started: "+PlatformPara.startTime+"\nEnded: "+dtf.format(LocalDateTime.now());
+        String time_work="Started: "+PlatformParameter.startTime+"\nEnded: "+dtf.format(LocalDateTime.now());
         String container="Number of containers: "+ManagerAgent.numberOfContainers;
         String details_of_containers="";
 
