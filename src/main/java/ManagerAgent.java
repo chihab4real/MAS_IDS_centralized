@@ -1,10 +1,7 @@
 import jade.core.Agent;
-import jade.core.behaviours.OneShotBehaviour;
 import weka.core.Instances;
-import weka.core.converters.ConverterUtils;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 public class ManagerAgent extends Agent {
 
@@ -14,13 +11,12 @@ public class ManagerAgent extends Agent {
 
     public static ArrayList<PacketSniffer> allPackets=new ArrayList<>();
 
-    public static int numberOfContainers =100;
-
+    public static int numberOfContainers =1;
     public static ArrayList<Container> containers = new ArrayList<>();
 
 
     public static ArrayList<Attack> attacks=new ArrayList<>();
-    public static int number=1000;
+    public static int treating_time =1000;
 
     public static Clasificator DT,SVM,NN;
 

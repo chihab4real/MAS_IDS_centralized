@@ -1,14 +1,12 @@
 import jade.core.Agent;
 import jade.core.behaviours.TickerBehaviour;
-import weka.core.Instances;
-import weka.core.converters.ConverterUtils.*;
 
 import java.util.Random;
 
 
 public class BehSniff extends TickerBehaviour {
     public BehSniff(Agent a) {
-        super(a, ManagerAgent.number);
+        super(a, ManagerAgent.treating_time);
     }
 
     @Override
@@ -37,6 +35,9 @@ public class BehSniff extends TickerBehaviour {
 
             ManagerAgent.containers.get(Integer.parseInt(myId)-1).getPacketsDetected().add(packetSniffer);
             ManagerAgent.containers.get(Integer.parseInt(myId)-1).getAll().add(packetSniffer);
+
+            int rand = new Random().nextInt((900 - 100) + 1) + 100;
+            reset(rand);
         }
 
 

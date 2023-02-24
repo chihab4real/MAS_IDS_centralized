@@ -12,7 +12,9 @@ public class BehClassif extends CyclicBehaviour {
 
 
         if(!ManagerAgent.stop){
+
             if(!ManagerAgent.packetsDetected.isEmpty()){
+
                 PacketSniffer packetSniffer = ManagerAgent.packetsDetected.get(0);
 
 
@@ -30,8 +32,11 @@ public class BehClassif extends CyclicBehaviour {
                 }
 
 
-
-
+                try {
+                    Thread.sleep(ManagerAgent.treating_time);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
 
             }
         }
@@ -165,7 +170,7 @@ public class BehClassif extends CyclicBehaviour {
             x+="NN,";
         }
 
-        //System.out.println("\n\nBYWHO:"+x);
+        System.out.println("\n\nBYWHO:"+x);
         return x;
     }
 

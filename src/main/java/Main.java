@@ -2,7 +2,6 @@ import com.mongodb.*;
 import jade.core.Profile;
 import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
-import org.w3c.dom.Document;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -11,7 +10,6 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -19,6 +17,7 @@ public class Main {
 
 
     static int index1=0;
+    static String code = "_"+ManagerAgent.treating_time +"_"+ManagerAgent.numberOfContainers;
     public static void main(String[] args) {
 
 
@@ -39,12 +38,15 @@ public class Main {
 
 
                     System.out.println(ManagerAgent.allPackets.size());
+                    System.out.println(ManagerAgent.packetsClassified.size());
                     try {
                         sendPackettoDB(ManagerAgent.packetsClassified);
+                        System.exit(-1);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    System.exit(0);
+
+                    System.exit(-1);
 
                     ManagerAgent.stop = true;
                 }
@@ -164,9 +166,9 @@ public class Main {
 
     public static void sendPackettoDB(ArrayList<PacketDetected> packetDetected)throws Exception{
         MongoClient mongoClient = new MongoClient(new MongoClientURI("mongodb://localhost:27017"));
-        DB database = mongoClient.getDB("Test_Centralized");
+        DB database = mongoClient.getDB("PacketsCentra");
 
-        DBCollection collection = database.getCollection("PacketsDetected_1_100");
+        DBCollection collection = database.getCollection("PacketsDetected"+code);
 
 
         for(PacketDetected p : packetDetected){
